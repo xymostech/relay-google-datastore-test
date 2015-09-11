@@ -14,21 +14,23 @@
 */
 "use strict";
 
-var express = require('express');
+var path = require('path');
 
-var app = express();
 
-// [START hello_world]
-/* Say hello! */
-app.get('/', function(req, res) {
-  res.status(200).send("Hello, world!");
-});
-// [END hello_world]
+module.exports = {
+  port: '8080',
 
-// [START server]
-/* Start the server */
-var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
-  console.log('App listening at http://%s:%s', server.address().address, server.address().port);
-  console.log("Press Ctrl+C to quit.");
-});
-// [END server]
+  /*
+    dataBackend can be 'datastore', 'cloudsql', or 'mongodb'. Be sure to
+    configure the appropriate settings for each storage engine below.
+    Note that datastore requires no additional configuration.
+  */
+  dataBackend: 'datastore',
+
+  /*
+    This is the id of your project in the Google Developers Console.
+  */
+  gcloud: {
+    projectId: 'central-catcher-106523'
+  },
+};
