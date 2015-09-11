@@ -1,11 +1,11 @@
 // Model types
 class Book {
-    constructor(id, title, author, description, pubDate) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.description = description;
-        this.pubDate = pubDate;
+    constructor(data) {
+        this.id = data.id;
+        this.title = data.title;
+        this.author = data.author;
+        this.description = data.description;
+        this.pubDate = data.pubDate;
     }
 }
 
@@ -17,13 +17,7 @@ function bookById(id) {
             if (err) {
                 reject(err);
             } else {
-                resolve(new Book(
-                    result.id,
-                    result.title,
-                    result.author,
-                    result.description,
-                    result.pubDate
-                ));
+                resolve(new Book(result));
             }
         });
     });
@@ -35,13 +29,19 @@ function getBooks() {
             if (err) {
                 reject(err);
             } else {
-                resolve(results.map((result) => new Book(
-                    result.id,
-                    result.title,
-                    result.author,
-                    result.description,
-                    result.pubDate
-                )));
+                resolve(results.map((result) => new Book(result)));
+            }
+        });
+    });
+}
+
+function addBook(data) {
+    return new Promise(function(resolve, reject) {
+        model.create(data, function(err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(new Book(result));
             }
         });
     });

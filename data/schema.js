@@ -84,7 +84,7 @@ var bookType = new GraphQLObjectType({
             type: GraphQLString,
             description: 'A description of the book',
         },
-        publishedDate: {
+        pubDate: {
             type: GraphQLString,
             description: 'The date the book was published',
         },
