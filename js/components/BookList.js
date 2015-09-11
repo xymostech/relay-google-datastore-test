@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-class BookApp extends React.Component {
+class BookList extends React.Component {
     render() {
         return <div>
             <ul>
@@ -12,7 +12,7 @@ class BookApp extends React.Component {
     }
 }
 
-export default Relay.createContainer(BookApp, {
+export default Relay.createContainer(BookList, {
     fragments: {
         viewer: () => Relay.QL`
             fragment on Viewer {

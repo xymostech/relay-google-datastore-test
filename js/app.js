@@ -1,7 +1,7 @@
 import Book from "./components/Book";
 import BookRoute from "./routes/BookRoute";
-import BookApp from './components/BookApp';
-import AppHomeRoute from './routes/AppHomeRoute';
+import BookList from "./components/BookList";
+import BookListRoute from "./routes/BookListRoute";
 
 import { Router, Route, Link } from 'react-router';
 
@@ -16,14 +16,20 @@ class BookThing extends React.Component {
     }
 }
 
-class BookList extends React.Component {
+class BookListThing extends React.Component {
     render() {
         return (
             <Relay.RootContainer
-                Component={BookApp}
-                route={new AppHomeRoute()}
+                Component={BookList}
+                route={new BookListRoute()}
             />
         );
+    }
+}
+
+class AddBook extends React.Component {
+    render() {
+        return <div>Wheee!</div>;
     }
 }
 
@@ -40,8 +46,9 @@ class App extends React.Component {
 ReactDOM.render((
     <Router>
         <Route component={App}>
-    <Route path="/book/:bookID" component={BookThing} />
-    <Route path="/" component={BookList} />
+            <Route path="/book/:bookID" component={BookThing} />
+            <Route path="/add-book" component={AddBook} />
+            <Route path="/" component={BookListThing} />
         </Route>
     </Router>
 ), document.getElementById('root'));
