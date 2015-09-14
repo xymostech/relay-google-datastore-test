@@ -23,13 +23,16 @@ function bookById(id) {
     });
 }
 
-function getBooks() {
+function getBooks(limit, startCursor) {
     return new Promise(function(resolve, reject) {
-        model.list(10, false, function(err, results, cursor) {
+        model.list(limit, startCursor, function(err, results, endCursor) {
             if (err) {
                 reject(err);
             } else {
-                resolve(results.map((result) => new Book(result)));
+                resolve({
+                    results: results.map((result) => new Book(result)),
+                    cursor: endCursor,
+                });
             }
         });
     });

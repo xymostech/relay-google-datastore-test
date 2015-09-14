@@ -82,11 +82,18 @@ function list(limit, token, cb) {
     var q = ds.createQuery([kind])
         .limit(limit)
         .order('title')
-        .start(token);
+        .autoPaginate(false);
+
+    if (token) {
+        q = q.start(token);
+    }
 
     ds.runQuery(q, function(err, entities, cursor) {
-        if (err) return cb(err);
-        cb(null, entities.map(fromDatastore), entities.length === limit ? cursor : false);
+        if (err) {
+            cb(err);
+        } else {
+            cb(null, entities.map(fromDatastore), cursor && cursor.startVal);
+        }
     });
 }
 // [END list]

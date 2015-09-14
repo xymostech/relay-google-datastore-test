@@ -97,9 +97,46 @@ var viewerType = new GraphQLObjectType({
     description: 'I have no idea why this is needed',
     fields: () => ({
         books: {
-            type: new GraphQLList(bookType),
-            description: 'All the books!',
-            resolve: getBooks
+            type: bookConnection,
+            args: {
+                first: {
+                    type: GraphQLInt,
+                },
+                after: {
+                    type: GraphQLString,
+                }
+            },
+            description: 'Some books!',
+            resolve: (viewer, args) => {
+                var promise;
+                if (args.after) {
+                    promise = getBooks(args.first, args.after);
+                } else {
+                    promise = getBooks(args.first);
+                }
+
+                return promise.then(({results: books, cursor}) => {
+                    var edges = books.map((book, i) => {
+                        return {
+                            node: book,
+                            // TODO(emily): Each edge needs a cursor? D:
+                            cursor: i + 1 === books.length ? cursor : "",
+                        }
+                    });
+
+                    return {
+                        pageInfo: {
+                            // TODO(emily): Do something about these?
+                            hasNextPage: true,
+                            hasPreviousPage: true,
+
+                            startCursor: args.after ? args.after : null,
+                            endCursor: cursor,
+                        },
+                        edges,
+                    };
+                });
+            },
         }
     })
 });
@@ -107,8 +144,13 @@ var viewerType = new GraphQLObjectType({
 /**
  * Define your own connection types here
  */
-var {connectionType: bookConnection} =
-    connectionDefinitions({name: 'Book', nodeType: bookType});
+var {
+    connectionType: bookConnection,
+    edgeType: bookEdge,
+} = connectionDefinitions({
+    name: 'Book',
+    nodeType: bookType
+});
 
 /**
  * This is the type that will be the root of our query,

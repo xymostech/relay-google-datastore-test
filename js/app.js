@@ -3,7 +3,7 @@ import BookRoute from "./routes/BookRoute";
 import BookList from "./components/BookList";
 import BookListRoute from "./routes/BookListRoute";
 
-import { Router, Route, Link } from 'react-router';
+import { Router, Route, Link, Redirect, IndexRoute } from 'react-router';
 
 class BookThing extends React.Component {
     render() {
@@ -21,7 +21,7 @@ class BookListThing extends React.Component {
         return (
             <Relay.RootContainer
                 Component={BookList}
-                route={new BookListRoute()}
+                route={new BookListRoute({cursor: this.props.location.query.cursor})}
             />
         );
     }
@@ -45,10 +45,10 @@ class App extends React.Component {
 
 ReactDOM.render((
     <Router>
-        <Route component={App}>
+        <Route path="/" component={App}>
+            <IndexRoute component={BookListThing} />
             <Route path="/book/:bookID" component={BookThing} />
             <Route path="/add-book" component={AddBook} />
-            <Route path="/" component={BookListThing} />
         </Route>
     </Router>
 ), document.getElementById('root'));
